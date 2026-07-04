@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SINAI DROP | زيت زيتون بكر ممتاز من قلب سيناء</title>
+<link rel="icon" type="image/png" href="sinai-drop-icon.png">
+<link rel="shortcut icon" type="image/png" href="sinai-drop-icon.png">
+<link rel="apple-touch-icon" href="sinai-drop-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest-deepest:#0c1a11;
+    --forest-dark:#132a1c;
+    --forest:#1d3d28;
+    --forest-light:#2c5138;
+    --gold:#c9a24a;
+    --gold-bright:#e8cf8a;
+    --gold-dim:#8a7231;
+    --parchment:#cdbc93;
+    --cream:#f3ead4;
+    --ink:#0a150d;
+    --shadow:0 20px 50px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Cairo', sans-serif;
+    background:var(--forest-deepest);
+    color:var(--cream);
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+
+  .logotype{
+    font-family:'Cormorant Garamond', serif;
+    letter-spacing:.14em;
+  }
+
+  /* ---------- background texture ---------- */
+  .grain-bg{
+    position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 38%, rgba(122,92,24,.65) 0%, rgba(90,84,32,.5) 30%, rgba(47,68,41,.45) 58%, transparent 80%),
+      radial-gradient(ellipse 60% 70% at 0% 50%, rgba(58,74,30,.55), transparent 65%),
+      radial-gradient(ellipse 60% 70% at 100% 50%, rgba(58,74,30,.55), transparent 65%),
+      linear-gradient(180deg, var(--forest-deepest), var(--ink) 60%, var(--forest-deepest));
+  }
+  .grain-bg::after{
+    content:"";
+    position:absolute; inset:0;
+    opacity:.06; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed; top:0; inset-inline:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 6%;
+    background:linear-gradient(180deg, rgba(10,21,13,.92), rgba(10,21,13,0));
+    backdrop-filter:blur(2px);
+    transition:background .3s ease, padding .3s ease;
+  }
+  header.scrolled{
+    background:rgba(10,21,13,.86);
+    padding:12px 6%;
+    box-shadow:0 4px 24px rgba(0,0,0,.35);
+    border-bottom:1px solid rgba(201,162,74,.15);
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-icon{
+    width:34px; height:34px; flex-shrink:0; border-radius:50%;
+    object-fit:cover; border:1px solid rgba(201,162,74,.4);
+  }
+  .brand .name{
+    font-size:1.35rem; color:var(--gold-bright); font-weight:600;
+  }
+  nav ul{display:flex; gap:34px; font-size:.95rem; font-weight:500;}
+  nav a{color:var(--cream); position:relative; padding-bottom:4px; opacity:.9;}
+  nav a::after{
+    content:""; position:absolute; right:0; bottom:0; width:0; height:1px;
+    background:var(--gold); transition:width .3s ease;
+  }
+  nav a:hover::after{width:100%;}
+  .nav-actions{display:flex; align-items:center; gap:30px;}
+  .nav-cta{
+    background:var(--gold); color:var(--ink); padding:9px 22px; border-radius:2px;
+    font-weight:700; font-size:.9rem; letter-spacing:.02em; white-space:nowrap;
+  }
+  .whatsapp-nav-btn{
+    display:flex; align-items:center; justify-content:center;
+    width:40px; height:40px; border-radius:50%; flex-shrink:0;
+    background:rgba(37,211,102,.14); border:1px solid rgba(37,211,102,.55);
+    transition:all .25s ease;
+  }
+  .whatsapp-nav-btn:hover{background:#25D366; transform:translateY(-2px);}
+  .whatsapp-nav-btn svg{width:20px; height:20px; fill:#25D366; transition:fill .25s ease;}
+  .whatsapp-nav-btn:hover svg{fill:var(--ink);}
+  .teronex-nav-credit{
+    font-size:.78rem; color:var(--parchment); opacity:.75; white-space:nowrap;
+    border:1px solid rgba(201,162,74,.3); border-radius:20px; padding:7px 14px;
+    transition:all .25s ease;
+  }
+  .teronex-nav-credit b{color:var(--gold-bright); font-weight:700;}
+  .teronex-nav-credit:hover{opacity:1; border-color:var(--gold);}
+  .menu-toggle{
+    display:none; flex-direction:column; gap:5px; cursor:pointer;
+    background:none; border:none; padding:6px; z-index:110;
+  }
+  .menu-toggle span{
+    width:24px; height:2px; background:var(--gold-bright); display:block;
+    transition:transform .3s ease, opacity .3s ease;
+  }
+  .menu-toggle.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .menu-toggle.active span:nth-child(2){opacity:0;}
+  .menu-toggle.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:140px 6% 100px;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute; inset:0; z-index:-1;
+    background-image:url('sinai-drop-product.jpeg');
+    background-size:cover; background-position:center 30%;
+    filter:blur(2px) brightness(.4) saturate(1.1);
+    transform:scale(1.08);
+  }
+  .hero-bg::after{content:"";}
+  .hero-veil{
+    position:absolute; inset:0; z-index:-1;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(12,26,17,.35), rgba(9,17,11,.88) 70%),
+      linear-gradient(180deg, rgba(9,17,11,.55) 0%, rgba(9,17,11,.35) 40%, var(--forest-deepest) 100%);
+  }
+  .hero-content{
+    text-align:center; max-width:820px; z-index:1;
+    animation:riseIn 1.1s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(28px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .hero-icon{
+    width:84px; height:84px; margin:0 auto 18px; display:block;
+    filter:drop-shadow(0 4px 18px rgba(0,0,0,.4));
+  }
+  .hero-content .logo-big{
+    font-size:clamp(3.2rem, 9vw, 6.2rem);
+    color:var(--gold-bright);
+    line-height:.95;
+    text-shadow:0 6px 40px rgba(0,0,0,.5);
+  }
+  .hero-content .logo-big span{display:block; color:var(--cream);}
+  .hero-tagline-ar{
+    font-family:'Amiri', serif;
+    font-size:clamp(1.3rem, 3vw, 1.9rem);
+    color:var(--cream);
+    margin-top:22px;
+    line-height:1.6;
+  }
+  .hero-tagline-ar b{color:var(--gold);}
+  .hero-sub{
+    margin-top:14px; font-size:1rem; color:var(--parchment); font-weight:300;
+    letter-spacing:.02em;
+  }
+  .hero-actions{
+    margin-top:44px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+  }
+  .btn{
+    padding:15px 34px; border-radius:2px; font-weight:700; font-size:1rem;
+    letter-spacing:.02em; border:1px solid transparent; cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .btn-gold{background:var(--gold); color:var(--ink);}
+  .btn-gold:hover{transform:translateY(-3px); box-shadow:0 14px 30px rgba(201,162,74,.35);}
+  .btn-ghost{border-color:rgba(243,234,212,.4); color:var(--cream);}
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold-bright); transform:translateY(-3px);}
+
+  .badge-liter{
+    position:absolute; bottom:46px; left:50%; transform:translateX(-50%);
+    border:1px solid var(--gold-dim); color:var(--parchment);
+    padding:6px 22px; border-radius:30px; font-size:.75rem; letter-spacing:.2em;
+    font-family:'Cormorant Garamond', serif;
+  }
+
+  /* ---------- mountain divider (signature element) ---------- */
+  .divider{
+    position:relative; width:100%; line-height:0;
+    background:var(--forest-deepest);
+  }
+  .divider svg{width:100%; height:auto; display:block;}
+  .divider .ridge-back{fill:var(--forest-dark);}
+  .divider .ridge-front{fill:var(--forest);}
+  .divider .road{stroke:var(--gold-dim); stroke-width:1;}
+  .divider .glow{opacity:.5;}
+
+  /* ---------- section shell ---------- */
+  section{position:relative; padding:100px 6%;}
+  .eyebrow{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    color:var(--gold); letter-spacing:.08em; font-size:1.05rem; margin-bottom:10px;
+    display:flex; align-items:center; gap:12px; justify-content:center;
+  }
+  .eyebrow::before, .eyebrow::after{content:""; width:34px; height:1px; background:var(--gold-dim);}
+  .section-title{
+    font-family:'Amiri', serif; text-align:center;
+    font-size:clamp(1.8rem, 4vw, 2.6rem); color:var(--cream); margin-bottom:14px;
+  }
+  .section-sub{
+    text-align:center; color:var(--parchment); max-width:600px; margin:0 auto 60px;
+    font-weight:300; line-height:1.9;
+  }
+
+  /* ---------- features ---------- */
+  .features{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:28px;
+    max-width:1180px; margin:0 auto;
+  }
+  .feature-card{
+    background:linear-gradient(160deg, rgba(29,61,40,.55), rgba(12,26,17,.55));
+    border:1px solid rgba(201,162,74,.18);
+    border-radius:6px; padding:34px 26px; text-align:center;
+    transition:transform .3s ease, border-color .3s ease, background .3s ease;
+  }
+  .feature-card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(201,162,74,.55);
+    background:linear-gradient(160deg, rgba(44,81,56,.6), rgba(12,26,17,.6));
+  }
+  .feature-icon{
+    width:52px; height:52px; margin:0 auto 18px;
+    border:1px solid var(--gold-dim); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .feature-icon svg{width:24px; height:24px; stroke:var(--gold-bright); fill:none;}
+  .feature-card h3{font-size:1.1rem; color:var(--gold-bright); margin-bottom:8px; font-weight:600;}
+  .feature-card p{font-size:.9rem; color:var(--parchment); line-height:1.8; font-weight:300;}
+
+  /* ---------- story / why-different split ---------- */
+  .story{
+    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+    max-width:1180px; margin:0 auto;
+  }
+  .story-image{
+    position:relative; border-radius:10px; overflow:hidden;
+    border:1px solid rgba(201,162,74,.3);
+    box-shadow:var(--shadow);
+  }
+  .story-image img{width:100%; height:100%; object-fit:cover; display:block;}
+  .story-image::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(160deg, rgba(201,162,74,.08), transparent 40%);
+    pointer-events:none;
+  }
+  .story-text h3{
+    font-family:'Amiri', serif; font-size:1.9rem; color:var(--gold-bright);
+    margin-bottom:22px; line-height:1.5;
+  }
+  .why-list{display:flex; flex-direction:column; gap:20px;}
+  .why-item{
+    display:flex; align-items:flex-start; gap:16px;
+    padding:18px 20px; border-radius:8px;
+    background:linear-gradient(160deg, rgba(29,61,40,.4), rgba(12,26,17,.3));
+    border:1px solid rgba(201,162,74,.15);
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .why-item:hover{transform:translateX(-4px); border-color:rgba(201,162,74,.5);}
+  .why-icon{
+    flex-shrink:0; width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--gold-dim); display:flex; align-items:center; justify-content:center;
+  }
+  .why-icon svg{width:18px; height:18px; stroke:var(--gold-bright); fill:none;}
+  .why-item h4{color:var(--gold-bright); font-size:1.02rem; margin-bottom:5px; font-weight:700;}
+  .why-item p{color:var(--parchment); font-size:.88rem; line-height:1.75; font-weight:300;}
+  @media (max-width:900px){
+    .story{grid-template-columns:1fr;}
+    .story-image{order:-1;}
+  }
+
+  /* ---------- specs ---------- */
+  .specs-wrap{
+    max-width:900px; margin:0 auto;
+    background:radial-gradient(circle at 30% 20%, rgba(44,81,56,.4), transparent 60%), rgba(12,26,17,.5);
+    border:1px solid rgba(201,162,74,.2); border-radius:10px; padding:52px;
+  }
+  .specs{display:grid; grid-template-columns:repeat(2, 1fr); gap:0;}
+  .spec-item{
+    padding:22px 10px; border-bottom:1px solid rgba(201,162,74,.15);
+    display:flex; justify-content:space-between; gap:20px;
+  }
+  .spec-item:nth-child(odd){border-inline-end:1px solid rgba(201,162,74,.15);}
+  .spec-item .k{color:var(--parchment); font-weight:300; font-size:.95rem;}
+  .spec-item .v{color:var(--gold-bright); font-weight:700; font-size:.95rem; white-space:nowrap;}
+
+  /* ---------- order / contact ---------- */
+  .order{
+    background:linear-gradient(180deg, var(--forest-dark), var(--forest-deepest));
+    text-align:center;
+  }
+  .order-card{
+    max-width:760px; margin:0 auto; padding:60px 40px;
+    border:1px solid var(--gold-dim); border-radius:10px;
+    background:rgba(29,61,40,.35);
+    position:relative;
+  }
+  .order-card::before{
+    content:""; position:absolute; inset:-1px; border-radius:10px; padding:1px;
+    background:linear-gradient(135deg, var(--gold), transparent 40%, transparent 60%, var(--gold));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    opacity:.5; pointer-events:none;
+  }
+  .phones{
+    display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin:34px 0 26px;
+  }
+  .phone-pill{
+    display:flex; align-items:center; gap:12px;
+    border:1px solid rgba(201,162,74,.4); border-radius:40px;
+    padding:14px 26px; font-size:1.15rem; font-weight:700; color:var(--gold-bright);
+    letter-spacing:.03em; direction:ltr; transition:all .25s ease;
+  }
+  .phone-pill:hover{background:var(--gold); color:var(--ink); border-color:var(--gold); transform:translateY(-3px);}
+  .phone-pill svg{width:20px; height:20px; stroke:currentColor; fill:none;}
+  .socials{display:flex; gap:16px; justify-content:center; margin-top:30px;}
+  .social-btn{
+    width:48px; height:48px; border-radius:50%;
+    border:1px solid rgba(201,162,74,.4);
+    display:flex; align-items:center; justify-content:center;
+    transition:all .25s ease;
+  }
+  .social-btn svg{width:20px; height:20px; stroke:var(--gold-bright); fill:none;}
+  .social-btn:hover{background:var(--gold); border-color:var(--gold); transform:translateY(-4px);}
+  .social-btn:hover svg{stroke:var(--ink);}
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:40px 6% 30px; text-align:center; color:var(--parchment);
+    border-top:1px solid rgba(201,162,74,.15); font-size:.85rem; font-weight:300;
+  }
+  footer .foot-brand{
+    font-family:'Cormorant Garamond', serif; color:var(--gold-bright); font-size:1.3rem; letter-spacing:.1em; margin-bottom:10px;
+  }
+  .flag-chip{
+    display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:.78rem; opacity:.8;
+  }
+
+  /* ---------- reviews / testimonials ---------- */
+  .reviews-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:24px; max-width:1180px; margin:0 auto;
+  }
+  .review-card{
+    background:linear-gradient(160deg, rgba(29,61,40,.5), rgba(12,26,17,.55));
+    border:1px solid rgba(201,162,74,.18); border-radius:8px;
+    padding:28px 24px; display:flex; flex-direction:column; gap:16px;
+    transition:transform .3s ease, border-color .3s ease;
+  }
+  .review-card:hover{transform:translateY(-6px); border-color:rgba(201,162,74,.5);}
+  .review-quote-mark{color:var(--gold); font-family:'Amiri', serif; font-size:2.4rem; line-height:.5; opacity:.7;}
+  .review-text{
+    font-family:'Amiri', serif; font-size:1.05rem; line-height:1.85; color:var(--cream);
+    flex-grow:1;
+  }
+  .review-foot{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:14px; border-top:1px solid rgba(201,162,74,.15);
+  }
+  .review-stars{color:var(--gold); font-size:.9rem; letter-spacing:2px;}
+  .review-source{
+    display:flex; align-items:center; gap:6px; font-size:.75rem; color:var(--parchment); opacity:.85;
+  }
+  .review-source svg{width:14px; height:14px; fill:#25D366;}
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:980px){
+    .features{grid-template-columns:repeat(2, 1fr);}
+    .specs{grid-template-columns:1fr;}
+    .spec-item:nth-child(odd){border-inline-end:none;}
+    section{padding:80px 6%;}
+  }
+
+  @media (max-width:720px){
+    header{padding:14px 5%;}
+    header.scrolled{padding:10px 5%;}
+    .brand .name{font-size:1.1rem;}
+    .brand-icon{width:28px; height:28px;}
+    .nav-actions{gap:14px;}
+    .nav-cta{padding:8px 14px; font-size:.78rem;}
+    .teronex-nav-credit{display:none;}
+    .menu-toggle{display:flex;}
+
+    nav{
+      position:fixed; inset:0; top:0; height:100dvh; width:100%;
+      background:rgba(9,17,11,.97); backdrop-filter:blur(6px);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; visibility:hidden; transform:translateY(-14px);
+      transition:opacity .3s ease, transform .3s ease, visibility .3s;
+      z-index:105;
+    }
+    nav.open{opacity:1; visibility:visible; transform:translateY(0);}
+    nav ul{flex-direction:column; align-items:center; gap:32px; font-size:1.3rem;}
+
+    .hero{padding:110px 6% 80px; min-height:100svh;}
+    .hero-icon{width:60px; height:60px; margin-bottom:12px;}
+    .hero-content .logo-big{font-size:clamp(2.6rem, 14vw, 4rem);}
+    .hero-tagline-ar{font-size:1.1rem;}
+    .hero-actions{flex-direction:column; width:100%; align-items:center;}
+    .btn{width:100%; max-width:320px; justify-content:center;}
+    .badge-liter{bottom:24px; font-size:.65rem; padding:5px 16px;}
+
+    section{padding:64px 5%;}
+    .section-title{font-size:1.5rem;}
+    .section-sub{margin-bottom:40px; font-size:.92rem;}
+
+    .features{grid-template-columns:1fr; gap:18px;}
+    .feature-card{padding:26px 20px;}
+
+    .story{gap:34px;}
+    .story-image img{max-height:380px;}
+    .story-text h3{font-size:1.4rem; text-align:center;}
+    .why-item:hover{transform:none;}
+
+    .specs-wrap{padding:30px 22px;}
+    .spec-item{padding:16px 4px; flex-wrap:wrap; gap:6px;}
+
+    .reviews-grid{grid-template-columns:1fr;}
+
+    .order-card{padding:40px 22px;}
+    .phones{flex-direction:column; align-items:stretch; gap:14px;}
+    .phone-pill{justify-content:center; font-size:1rem; padding:14px 20px;}
+    .socials{gap:14px;}
+
+    footer{padding:34px 6% 24px;}
+  }
+
+  @media (max-width:400px){
+    .hero-icon{width:48px; height:48px;}
+    .hero-content .logo-big{font-size:2.3rem;}
+    .eyebrow{font-size:.9rem;}
+    .eyebrow::before, .eyebrow::after{width:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="grain-bg"></div>
+
+<header id="siteHeader">
+  <div class="brand">
+    <img src="sinai-drop-icon.png" alt="Sinai Drop" class="brand-icon">
+    <span class="name logotype">SINAI DROP</span>
+  </div>
+  <div class="nav-actions">
+    <nav id="siteNav">
+      <ul>
+        <li><a href="#المنتج">المنتج</a></li>
+        <li><a href="#المميزات">المميزات</a></li>
+        <li><a href="#المواصفات">المواصفات</a></li>
+        <li><a href="#آراء-العملاء">آراء عملائنا</a></li>
+        <li><a href="#تواصل">تواصل معنا</a></li>
+      </ul>
+    </nav>
+    <a href="booking.html" class="nav-cta">احجز عبر موقعنا</a>
+    <a href="https://teronex-tech.github.io/Teronex/" target="_blank" rel="noopener" class="teronex-nav-credit">بواسطة <b>Teronex</b></a>
+    <a href="https://wa.me/201009092378" target="_blank" rel="noopener" class="whatsapp-nav-btn" aria-label="تواصل معنا على واتساب">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.76.46 3.42 1.26 4.86L2 22l5.29-1.39A9.93 9.93 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.62 0-3.13-.44-4.44-1.22l-.32-.19-3.15.83.84-3.07-.21-.32A7.94 7.94 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8zm4.38-5.93c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.19-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.11-.49.12-.12.28-.31.42-.47.14-.16.19-.27.28-.45.09-.18.05-.34-.03-.47-.08-.13-.5-1.21-.69-1.66-.18-.44-.37-.38-.51-.39-.13-.01-.29-.01-.44-.01-.15 0-.4.06-.61.29-.21.23-.8.79-.8 1.92 0 1.13.82 2.23.94 2.38.12.15 1.6 2.45 3.89 3.34 2.29.89 2.29.59 2.7.55.41-.04 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="المنتج">
+  <div class="hero-bg"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <img src="sinai-drop-icon-transparent.png" alt="Sinai Drop" class="hero-icon">
+    <h1 class="logo-big logotype">SINAI<span>DROP</span></h1>
+    <p class="hero-tagline-ar">زيت زيتون <b>بكر ممتاز</b> — عصرة أولى على البارد<br>من قلب جبال <b>سيناء</b></p>
+    <p class="hero-sub">منتج مصري 100% طبيعي · بدون أي إضافات · غني بمضادات الأكسدة</p>
+    <div class="hero-actions">
+      <a href="booking.html" class="btn btn-gold">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        احجز عبر موقعنا
+      </a>
+      <a href="#المميزات" class="btn btn-ghost">اعرف أكتر</a>
+    </div>
+  </div>
+  <span class="badge-liter">١ لتر · Cold Pressed</span>
+</section>
+
+<!-- MOUNTAIN DIVIDER -->
+<div class="divider">
+  <svg viewBox="0 0 1440 220" preserveAspectRatio="none">
+    <path class="ridge-back" d="M0,180 L120,90 L220,150 L340,50 L460,140 L600,70 L760,160 L900,60 L1050,150 L1200,80 L1320,140 L1440,100 L1440,220 L0,220 Z"/>
+    <path class="ridge-front" d="M0,220 L100,140 L200,190 L320,110 L440,180 L580,120 L720,200 L860,110 L1000,190 L1140,130 L1280,200 L1440,150 L1440,220 L0,220 Z"/>
+    <path class="road" d="M660,220 C700,170 690,140 720,90" fill="none" opacity=".55"/>
+  </svg>
+</div>
+
+<!-- FEATURES -->
+<section id="المميزات">
+  <p class="eyebrow reveal">لماذا سيناي دروب</p>
+  <h2 class="section-title reveal">جودة تُقرأ من أول قطرة</h2>
+  <p class="section-sub reveal">كل زجاجة بتحمل خلاصة أشجار زيتون سيناء، من العصرة للتعبئة، من غير أي مواد مضافة.</p>
+  <div class="features">
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h3>100% طبيعي</h3>
+      <p>بدون أي إضافات أو مواد حافظة</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2s7 7.58 7 12a7 7 0 1 1-14 0c0-4.42 7-12 7-12z"/></svg></div>
+      <h3>عصرة أولى باردة</h3>
+      <p>للحفاظ على القيمة الغذائية الكاملة</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 21s-8-4.5-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 6.5-8 11-8 11z"/></svg></div>
+      <h3>غني بمضادات الأكسدة</h3>
+      <p>فيتامين E والدهون الصحية</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+      <h3>منتج مصري فاخر</h3>
+      <p>من قلب سيناء لسفرتك</p>
+    </div>
+  </div>
+</section>
+
+<!-- STORY / WHY DIFFERENT -->
+<section>
+  <p class="eyebrow reveal">قصة الزجاجة</p>
+  <h2 class="section-title reveal">مش مجرد زيت زيتون</h2>
+  <p class="section-sub reveal">كل تفصيلة في سيناي دروب اتحسبت عشان توصلك جودة حقيقية، من غير مبالغة ومن غير مواد صناعية.</p>
+  <div class="story">
+    <div class="story-image reveal">
+      <img src="oil.png" alt="زجاجات سيناي دروب زيت زيتون بكر ممتاز">
+    </div>
+    <div class="story-text reveal">
+      <h3>ليه سيناي دروب مختلف عن غيره؟</h3>
+      <div class="why-list">
+        <div class="why-item">
+          <div class="why-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2s7 7.58 7 12a7 7 0 1 1-14 0c0-4.42 7-12 7-12z"/></svg></div>
+          <div>
+            <h4>عصرة أولى باردة حقيقية</h4>
+            <p>بنستخلص الزيت بدرجة حرارة منخفضة عشان نحافظ على كل العناصر الغذائية والطعم الطبيعي، من غير أي معالجة حرارية بتقتل الفايدة.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+          <div>
+            <h4>من أشجار زيتون سيناء الأصيلة</h4>
+            <p>الزيتون بيتحصد من أراضي سيناء المميزة بتربتها ومناخها، وده اللي بيدي الزيت طعمه المركّز والمختلف عن أي زيت تاني في السوق.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div>
+            <h4>بدون خلط أو إضافات</h4>
+            <p>مفيش زيوت مخلوطة ولا نسب مجهولة. اللي جوه الزجاجة هو زيت زيتون بكر ممتاز 100%، بدرجة حموضة أقل من 0.8%.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 21s-8-4.5-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 6.5-8 11-8 11z"/></svg></div>
+          <div>
+            <h4>فحص جودة لكل دفعة إنتاج</h4>
+            <p>كل عبوة بتمر بمراحل فحص قبل ما توصلك، عشان نضمن نفس المستوى من الجودة والطعم في كل مرة تطلب فيها.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECS -->
+<section id="المواصفات">
+  <p class="eyebrow reveal">البطاقة الفنية</p>
+  <h2 class="section-title reveal">زيت زيتون بكر ممتاز</h2>
+  <p class="section-sub reveal">عصرة أولى على البارد بمعايير دقيقة من أول شجرة لآخر قطرة</p>
+  <div class="specs-wrap reveal">
+    <div class="specs">
+      <div class="spec-item"><span class="k">بلد المنشأ</span><span class="v">مصر – سيناء</span></div>
+      <div class="spec-item"><span class="k">طريقة الاستخلاص</span><span class="v">ميكانيكية باردة</span></div>
+      <div class="spec-item"><span class="k">درجة الحموضة</span><span class="v">أقل من 0.8%</span></div>
+      <div class="spec-item"><span class="k">حجم العبوة</span><span class="v">١ لتر</span></div>
+      <div class="spec-item"><span class="k">التخزين</span><span class="v">مكان بارد ومظلم</span></div>
+      <div class="spec-item"><span class="k">العبوة</span><span class="v">قابلة لإعادة التدوير</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MOUNTAIN DIVIDER (flip) -->
+<div class="divider" style="transform:scaleY(-1);">
+  <svg viewBox="0 0 1440 220" preserveAspectRatio="none">
+    <path class="ridge-back" d="M0,180 L120,90 L220,150 L340,50 L460,140 L600,70 L760,160 L900,60 L1050,150 L1200,80 L1320,140 L1440,100 L1440,220 L0,220 Z"/>
+    <path class="ridge-front" d="M0,220 L100,140 L200,190 L320,110 L440,180 L580,120 L720,200 L860,110 L1000,190 L1140,130 L1280,200 L1440,150 L1440,220 L0,220 Z"/>
+  </svg>
+</div>
+
+<!-- REVIEWS -->
+<section id="آراء-العملاء">
+  <p class="eyebrow reveal">كلام عملائنا</p>
+  <h2 class="section-title reveal">آراء حقيقية من ناس جربت المنتج</h2>
+  <p class="section-sub reveal">مجموعة من ردود عملائنا على واتساب بعد ما استلموا واستخدموا زيت سيناي دروب.</p>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">طبيعي بجد زي اللي كنت بجيبه زمان، ومكنتش متوقع كده بصراحة… بس بجد ماشاء الله تحفة.</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">ماشاء الله طعمو ممتاز جدا و شكرا على سرعه التوصيل و الاهتمام بجودة المنتج ❤️</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">دوقته وطعمه بجد جميل، اللذعة الخفيفة دي 😆</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">جربته وماشاء الله تحفة، تسلم إيدك والله.</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">الأوردر وصل، وبجد تسلم إيدك على سرعة التوصيل والأمانة في التعامل، وإن شاء الله مش هيكون آخر تعامل.</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">السلام عليكم، الزيت تحفة وحلو أوي بجد 🤍❤️</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">طعمه ممتاز فعلاً بالمقارنة بأنواع تانية كنت بدوقها قبل كده.</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <span class="review-quote-mark">"</span>
+      <p class="review-text">الزيت وصل، بصراحة جميل جدًا، ربنا يكرمك ويوفقك.</p>
+      <div class="review-foot">
+        <span class="review-stars">★★★★★</span>
+        <span class="review-source"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>واتساب</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER -->
+<section class="order" id="تواصل">
+  <p class="eyebrow reveal">للطلب والاستفسار</p>
+  <h2 class="section-title reveal">احجز زجاجتك دلوقتي</h2>
+  <div class="order-card reveal">
+    <p class="hero-sub" style="color:var(--parchment)">احجز طلبك مباشرة عبر الموقع، أو اتصل بينا، أو تواصل عبر السوشيال ميديا</p>
+    <a href="booking.html" class="btn btn-gold" style="margin:30px auto 6px; justify-content:center; max-width:320px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      احجز عبر موقعنا
+    </a>
+    <div class="phones">
+      <a class="phone-pill" href="https://wa.me/201009092378" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.79.6 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.27a2 2 0 0 1 2.11-.45c.86.28 1.75.48 2.65.6A2 2 0 0 1 22 16.92z"/></svg>
+        01009092378
+      </a>
+      <a class="phone-pill" href="https://wa.me/201212448828" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.79.6 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.27a2 2 0 0 1 2.11-.45c.86.28 1.75.48 2.65.6A2 2 0 0 1 22 16.92z"/></svg>
+        01212448828
+      </a>
+    </div>
+    <div class="socials">
+      <a class="social-btn" href="https://www.facebook.com/share/17gt1ZnsFi/" target="_blank" rel="noopener" aria-label="فيسبوك">
+        <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <a class="social-btn" href="https://www.instagram.com/sinaidrop?igsh=dnZram1pbG1yN2J5" target="_blank" rel="noopener" aria-label="انستجرام">
+        <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-brand logotype">SINAI DROP</div>
+  <p>زيت زيتون بكر ممتاز · صنع في مصر</p>
+  <div class="flag-chip">
+    <svg width="20" height="14" viewBox="0 0 20 14"><rect width="20" height="4.66" y="0" fill="#ce1126"/><rect width="20" height="4.66" y="4.67" fill="#fff"/><rect width="20" height="4.66" y="9.33" fill="#000"/></svg>
+    Made in Egypt
+  </div>
+  <p style="margin-top:16px; opacity:.6;">© 2026 Sinai Drop. جميع الحقوق محفوظة. | تصميم وتطوير <a href="https://teronex-tech.github.io/Teronex/" target="_blank" rel="noopener" style="color:var(--gold-bright); opacity:1; text-decoration:underline;">Teronex</a></p>
+</footer>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const menuToggle = document.getElementById('menuToggle');
+  const siteNav = document.getElementById('siteNav');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = siteNav.classList.toggle('open');
+    menuToggle.classList.toggle('active', isOpen);
+    menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  siteNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      siteNav.classList.remove('open');
+      menuToggle.classList.remove('active');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
