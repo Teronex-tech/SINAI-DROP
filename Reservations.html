@@ -84,9 +84,9 @@
     border-radius:20px; padding:7px 14px; font-size:.8rem; font-family:'Cairo', sans-serif; cursor:pointer;
   }
   .order-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:16px;}
-  .order-field{font-size:.85rem;}
+  .order-field{font-size:.85rem; min-width:0;}
   .order-field .k{color:var(--parchment); display:block; font-size:.75rem; margin-bottom:3px;}
-  .order-field .v{color:var(--cream); font-weight:600;}
+  .order-field .v{color:var(--cream); font-weight:600; display:block; overflow-wrap:anywhere; word-break:break-word;}
   .order-total{color:var(--gold-bright)!important; font-size:1.05rem;}
   .order-actions{display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
   .ss-link{
@@ -227,7 +227,7 @@
           <div class="order-field"><span class="k">الاسم</span><span class="v">${escapeHtml(o.name)}</span></div>
           <div class="order-field"><span class="k">الموبايل</span><span class="v" dir="ltr">${escapeHtml(o.phone)}</span></div>
           ${o.phone2 ? `<div class="order-field"><span class="k">موبايل إضافي</span><span class="v" dir="ltr">${escapeHtml(o.phone2)}</span></div>` : ''}
-          ${o.email ? `<div class="order-field"><span class="k">البريد الإلكتروني</span><span class="v" dir="ltr">${escapeHtml(o.email)}</span></div>` : ''}
+          ${o.email ? `<div class="order-field"><span class="k">البريد الإلكتروني</span><span class="v" dir="ltr" style="text-align:left;">${escapeHtml(o.email)}</span></div>` : ''}
           <div class="order-field"><span class="k">المحافظة</span><span class="v">${escapeHtml(o.governorate)}</span></div>
           <div class="order-field"><span class="k">العنوان</span><span class="v">${escapeHtml(o.address)}</span></div>
           <div class="order-field"><span class="k">حجم الزجاجة</span><span class="v">${escapeHtml(o.size)}</span></div>
