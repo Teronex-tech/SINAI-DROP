@@ -399,6 +399,8 @@
 
 <script>
   const UNIT_PRICE = 450;
+  // ضع هنا رابط الـ Web App اللي هتاخده بعد نشر Google Apps Script (خطوة 4 في الشرح)
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytlrg9RunEHd7K6w3Caf9XElzAcvjE7HnQAW1DHGGCKdv5MsuRuf7e9vy8aB-eOHSR/exec';
   const state = { name:'', phone:'', address:'', qty:1, method:'', screenshot:null };
 
   const panels = document.querySelectorAll('.panel');
@@ -529,16 +531,31 @@
       createdAt: new Date().toISOString(),
       status: 'قيد المراجعة'
     };
-    try{
-      const key = 'sinaidrop_orders';
-      const existing = JSON.parse(localStorage.getItem(key) || '[]');
-      existing.unshift(order);
-      localStorage.setItem(key, JSON.stringify(existing));
-    }catch(e){
-      console.error('تعذر حفظ الطلب', e);
-    }
-    document.getElementById('orderRefLabel').textContent = 'رقم الطلب: ' + order.id;
-    goToStep(4);
+
+    const submitBtn = document.getElementById('toStep4');
+    const originalLabel = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'جاري إرسال الطلب...';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // مهم: text/plain عشان نتفادى مشاكل CORS مع Apps Script
+      body: JSON.stringify({ action: 'create', order })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(!data.success) throw new Error(data.error || 'unknown error');
+      document.getElementById('orderRefLabel').textContent = 'رقم الطلب: ' + order.id;
+      goToStep(4);
+    })
+    .catch(err => {
+      console.error('تعذر إرسال الطلب', err);
+      alert('حصل خطأ أثناء إرسال الطلب. اتأكد من اتصالك بالإنترنت وحاول تاني.');
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+    });
   });
 
   document.getElementById('newOrderBtn').addEventListener('click', () => {
