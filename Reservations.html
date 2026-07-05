@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الحجوزات | SINAI DROP</title>
+<link rel="icon" type="image/png" href="sinai-drop-icon.png">
+<link rel="shortcut icon" type="image/png" href="sinai-drop-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest-deepest:#0c1a11;
+    --forest-dark:#132a1c;
+    --forest:#1d3d28;
+    --gold:#c9a24a;
+    --gold-bright:#e8cf8a;
+    --gold-dim:#8a7231;
+    --parchment:#cdbc93;
+    --cream:#f3ead4;
+    --ink:#0a150d;
+    --danger:#c9584a;
+    --ok:#7fae6f;
+    --shadow:0 20px 50px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Cairo', sans-serif; background:var(--forest-deepest); color:var(--cream); min-height:100vh;}
+  a{color:inherit; text-decoration:none;}
+  .logotype{font-family:'Cormorant Garamond', serif; letter-spacing:.14em;}
+
+  .grain-bg{
+    position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 0%, rgba(122,92,24,.5) 0%, rgba(90,84,32,.4) 30%, rgba(47,68,41,.4) 58%, transparent 80%),
+      linear-gradient(180deg, var(--forest-deepest), var(--ink) 60%, var(--forest-deepest));
+  }
+
+  header{
+    display:flex; align-items:center; justify-content:space-between; padding:18px 6%;
+    background:rgba(10,21,13,.9); border-bottom:1px solid rgba(201,162,74,.15);
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-icon{width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid rgba(201,162,74,.4);}
+  .brand .name{font-size:1.25rem; color:var(--gold-bright); font-weight:600;}
+  .back-link{
+    display:flex; align-items:center; gap:8px; font-size:.9rem; color:var(--parchment);
+    border:1px solid rgba(201,162,74,.35); padding:9px 18px; border-radius:30px; transition:.25s;
+  }
+  .back-link:hover{color:var(--gold-bright); border-color:var(--gold);}
+  .back-link svg{width:16px; height:16px; stroke:currentColor; fill:none;}
+
+  main{max-width:1100px; margin:0 auto; padding:44px 5% 90px;}
+  .page-title{font-family:'Amiri', serif; font-size:clamp(1.6rem,4vw,2.2rem); margin-bottom:6px;}
+  .page-sub{color:var(--parchment); font-size:.9rem; margin-bottom:30px; line-height:1.8;}
+  .note{
+    background:rgba(201,162,74,.08); border:1px solid rgba(201,162,74,.3); border-radius:8px;
+    padding:14px 18px; font-size:.82rem; color:var(--parchment); margin-bottom:30px; line-height:1.8;
+  }
+
+  .toolbar{display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; margin-bottom:24px;}
+  .stats{display:flex; gap:14px; flex-wrap:wrap;}
+  .stat-chip{
+    background:rgba(29,61,40,.5); border:1px solid rgba(201,162,74,.25); border-radius:8px;
+    padding:12px 20px; font-size:.85rem; color:var(--parchment);
+  }
+  .stat-chip b{color:var(--gold-bright); font-size:1.05rem; display:block; margin-bottom:2px;}
+  .toolbar-actions{display:flex; gap:10px;}
+  .btn-sm{
+    font-size:.82rem; padding:9px 18px; border-radius:20px; border:1px solid rgba(201,162,74,.4);
+    background:none; color:var(--parchment); cursor:pointer; transition:.2s;
+  }
+  .btn-sm:hover{border-color:var(--gold); color:var(--gold-bright);}
+  .btn-sm.danger:hover{border-color:var(--danger); color:var(--danger);}
+
+  .orders-list{display:flex; flex-direction:column; gap:16px;}
+  .order-card{
+    background:linear-gradient(160deg, rgba(29,61,40,.5), rgba(12,26,17,.55));
+    border:1px solid rgba(201,162,74,.22); border-radius:10px; padding:22px 24px;
+  }
+  .order-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+  .order-id{font-family:'Cormorant Garamond', serif; font-size:1.15rem; color:var(--gold-bright); font-weight:700; direction:ltr; display:inline-block;}
+  .order-date{font-size:.78rem; color:var(--parchment); opacity:.75; margin-top:4px;}
+  .status-select{
+    background:rgba(9,17,11,.5); border:1px solid rgba(201,162,74,.35); color:var(--gold-bright);
+    border-radius:20px; padding:7px 14px; font-size:.8rem; font-family:'Cairo', sans-serif; cursor:pointer;
+  }
+  .order-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:16px;}
+  .order-field{font-size:.85rem;}
+  .order-field .k{color:var(--parchment); display:block; font-size:.75rem; margin-bottom:3px;}
+  .order-field .v{color:var(--cream); font-weight:600;}
+  .order-total{color:var(--gold-bright)!important; font-size:1.05rem;}
+  .order-actions{display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
+  .ss-link{
+    font-size:.82rem; color:var(--gold); border:1px solid rgba(201,162,74,.4); border-radius:20px;
+    padding:7px 16px; cursor:pointer; background:none;
+  }
+  .ss-link:hover{background:var(--gold); color:var(--ink);}
+  .del-btn{
+    font-size:.82rem; color:var(--danger); border:1px solid rgba(201,88,74,.4); border-radius:20px;
+    padding:7px 16px; cursor:pointer; background:none; margin-inline-start:auto;
+  }
+  .del-btn:hover{background:var(--danger); color:var(--cream);}
+
+  .empty-state{text-align:center; padding:80px 20px; color:var(--parchment);}
+  .empty-state svg{width:50px; height:50px; stroke:var(--gold-dim); fill:none; margin-bottom:16px;}
+
+  /* screenshot modal */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(9,17,11,.92); backdrop-filter:blur(4px);
+    display:none; align-items:center; justify-content:center; z-index:200; padding:30px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{max-width:480px; text-align:center;}
+  .modal-box img{max-width:100%; max-height:70vh; border-radius:10px; border:1px solid rgba(201,162,74,.4);}
+  .modal-close{
+    margin-top:18px; display:inline-block; border:1px solid rgba(201,162,74,.4); color:var(--gold-bright);
+    padding:9px 22px; border-radius:20px; cursor:pointer; background:none; font-family:'Cairo', sans-serif;
+  }
+
+  footer{padding:30px 6%; text-align:center; color:var(--parchment); font-size:.8rem; opacity:.7; border-top:1px solid rgba(201,162,74,.12);}
+</style>
+</head>
+<body>
+
+<div class="grain-bg"></div>
+
+<header>
+  <div class="brand">
+    <img src="sinai-drop-icon.png" alt="Sinai Drop" class="brand-icon">
+    <span class="name logotype">SINAI DROP</span>
+  </div>
+  <a href="SINAI_DROP.html" class="back-link">
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M5 12l6-6M5 12l6 6"/></svg>
+    الرجوع للموقع
+  </a>
+</header>
+
+<main>
+  <h1 class="page-title">الحجوزات</h1>
+  <p class="page-sub">كل طلبات الحجز اللي تمت عبر صفحة الحجز على الموقع.</p>
+
+
+  <div class="toolbar">
+    <div class="stats" id="statsRow"></div>
+    <div class="toolbar-actions">
+      <button class="btn-sm" id="refreshBtn">تحديث</button>
+      <button class="btn-sm danger" id="clearBtn">حذف كل الحجوزات</button>
+    </div>
+  </div>
+
+  <div class="orders-list" id="ordersList"></div>
+</main>
+
+<footer>
+    <p style="margin-top:16px; opacity:.6;">© 2026 Sinai Drop. جميع الحقوق محفوظة. | تصميم وتطوير <a href="https://teronex-tech.github.io/Teronex/" target="_blank" rel="noopener" style="color:var(--gold-bright); opacity:1; text-decoration:underline;">Teronex</a></p>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <img id="modalImg" src="" alt="تأكيد الدفع">
+    <br>
+    <button class="modal-close" id="modalClose">إغلاق</button>
+  </div>
+</div>
+
+<script>
+  // ضع هنا نفس رابط الـ Web App المستخدم في صفحة الحجز (Booking.html)
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytlrg9RunEHd7K6w3Caf9XElzAcvjE7HnQAW1DHGGCKdv5MsuRuf7e9vy8aB-eOHSR/exec';
+  const statuses = ['قيد المراجعة', 'تم التأكيد', 'تم الشحن', 'ملغي'];
+  let ordersCache = [];
+
+  async function fetchOrders(){
+    try{
+      const res = await fetch(SCRIPT_URL);
+      const data = await res.json();
+      return data.success ? data.orders : [];
+    }catch(e){
+      console.error('تعذر تحميل الحجوزات', e);
+      return [];
+    }
+  }
+  async function postAction(payload){
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  }
+  function formatDate(iso){
+    const d = new Date(iso);
+    return d.toLocaleString('ar-EG', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+
+  async function render(){
+    const list = document.getElementById('ordersList');
+    list.innerHTML = `<div class="empty-state"><p>جاري تحميل الحجوزات...</p></div>`;
+    const orders = await fetchOrders();
+    ordersCache = orders;
+    const statsRow = document.getElementById('statsRow');
+
+    const totalRevenue = orders.reduce((s,o) => s + (o.total||0), 0);
+    statsRow.innerHTML = `
+      <div class="stat-chip"><b>${orders.length}</b>إجمالي الطلبات</div>
+      <div class="stat-chip"><b>${totalRevenue.toLocaleString('en-US')} جنيه</b>إجمالي المبيعات</div>
+    `;
+
+    if(orders.length === 0){
+      list.innerHTML = `<div class="empty-state">
+        <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 3h18M3 9h18M3 15h18M3 21h18"/></svg>
+        <p>لا توجد حجوزات بعد</p>
+      </div>`;
+      return;
+    }
+
+    list.innerHTML = orders.map((o) => `
+      <div class="order-card" data-id="${o.id}">
+        <div class="order-top">
+          <div>
+            <span class="order-id">${o.id}</span>
+            <div class="order-date">${formatDate(o.createdAt)}</div>
+          </div>
+          <select class="status-select" data-id="${o.id}">
+            ${statuses.map(s => `<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>
+        <div class="order-grid">
+          <div class="order-field"><span class="k">الاسم</span><span class="v">${escapeHtml(o.name)}</span></div>
+          <div class="order-field"><span class="k">الموبايل</span><span class="v" dir="ltr">${escapeHtml(o.phone)}</span></div>
+          <div class="order-field"><span class="k">العنوان</span><span class="v">${escapeHtml(o.address)}</span></div>
+          <div class="order-field"><span class="k">عدد الزجاجات</span><span class="v">${o.qty}</span></div>
+          <div class="order-field"><span class="k">وسيلة الدفع</span><span class="v">${escapeHtml(o.method)}</span></div>
+          <div class="order-field"><span class="k">الإجمالي</span><span class="v order-total">${Number(o.total).toLocaleString('en-US')} جنيه</span></div>
+        </div>
+        <div class="order-actions">
+          ${o.screenshotUrl ? `<a class="ss-link" href="${o.screenshotUrl}" target="_blank" rel="noopener">عرض صورة تأكيد الدفع</a>` : `<span style="font-size:.8rem;color:var(--parchment);opacity:.6;">لا توجد صورة تأكيد</span>`}
+          <button class="del-btn" data-id="${o.id}" data-action="delete">حذف الطلب</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
+  }
+
+  document.getElementById('ordersList').addEventListener('click', async (e) => {
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    const id = btn.dataset.id;
+    if(btn.dataset.action === 'delete'){
+      if(confirm('هل تريد حذف هذا الطلب؟')){
+        btn.disabled = true;
+        try{
+          const res = await postAction({ action:'delete', id });
+          if(!res.success) throw new Error(res.error || 'unknown');
+          render();
+        }catch(err){
+          alert('تعذر حذف الطلب، حاول تاني.');
+          btn.disabled = false;
+        }
+      }
+    }
+  });
+
+  document.getElementById('ordersList').addEventListener('change', async (e) => {
+    if(e.target.classList.contains('status-select')){
+      const id = e.target.dataset.id;
+      const newStatus = e.target.value;
+      e.target.disabled = true;
+      try{
+        const res = await postAction({ action:'updateStatus', id, status:newStatus });
+        if(!res.success) throw new Error(res.error || 'unknown');
+      }catch(err){
+        alert('تعذر تحديث الحالة، حاول تاني.');
+      }finally{
+        e.target.disabled = false;
+      }
+    }
+  });
+
+  document.getElementById('modalClose').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('open');
+  });
+  document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if(e.target.id === 'modalOverlay') e.target.classList.remove('open');
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', render);
+  document.getElementById('clearBtn').addEventListener('click', async () => {
+    if(confirm('هل أنت متأكد من حذف كل الحجوزات؟ لا يمكن التراجع عن هذا الإجراء.')){
+      try{
+        const res = await postAction({ action:'clear' });
+        if(!res.success) throw new Error(res.error || 'unknown');
+        render();
+      }catch(err){
+        alert('تعذر حذف كل الحجوزات، حاول تاني.');
+      }
+    }
+  });
+
+  render();
+</script>
+
+</body>
+</html>
