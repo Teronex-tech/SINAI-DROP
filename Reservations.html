@@ -163,24 +163,39 @@
 </div>
 
 <script>
-  const KEY = 'sinaidrop_orders';
+  // ضع هنا نفس رابط الـ Web App المستخدم في صفحة الحجز (Booking.html)
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytlrg9RunEHd7K6w3Caf9XElzAcvjE7HnQAW1DHGGCKdv5MsuRuf7e9vy8aB-eOHSR/exec';
   const statuses = ['قيد المراجعة', 'تم التأكيد', 'تم الشحن', 'ملغي'];
+  let ordersCache = [];
 
-  function loadOrders(){
-    try{ return JSON.parse(localStorage.getItem(KEY) || '[]'); }
-    catch(e){ return []; }
+  async function fetchOrders(){
+    try{
+      const res = await fetch(SCRIPT_URL);
+      const data = await res.json();
+      return data.success ? data.orders : [];
+    }catch(e){
+      console.error('تعذر تحميل الحجوزات', e);
+      return [];
+    }
   }
-  function saveOrders(orders){
-    localStorage.setItem(KEY, JSON.stringify(orders));
+  async function postAction(payload){
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    return res.json();
   }
   function formatDate(iso){
     const d = new Date(iso);
     return d.toLocaleString('ar-EG', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
   }
 
-  function render(){
-    const orders = loadOrders();
+  async function render(){
     const list = document.getElementById('ordersList');
+    list.innerHTML = `<div class="empty-state"><p>جاري تحميل الحجوزات...</p></div>`;
+    const orders = await fetchOrders();
+    ordersCache = orders;
     const statsRow = document.getElementById('statsRow');
 
     const totalRevenue = orders.reduce((s,o) => s + (o.total||0), 0);
@@ -192,19 +207,19 @@
     if(orders.length === 0){
       list.innerHTML = `<div class="empty-state">
         <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 3h18M3 9h18M3 15h18M3 21h18"/></svg>
-        <p>لا توجد حجوزات بعد على هذا الجهاز</p>
+        <p>لا توجد حجوزات بعد</p>
       </div>`;
       return;
     }
 
-    list.innerHTML = orders.map((o, idx) => `
-      <div class="order-card" data-idx="${idx}">
+    list.innerHTML = orders.map((o) => `
+      <div class="order-card" data-id="${o.id}">
         <div class="order-top">
           <div>
             <span class="order-id">${o.id}</span>
             <div class="order-date">${formatDate(o.createdAt)}</div>
           </div>
-          <select class="status-select" data-idx="${idx}">
+          <select class="status-select" data-id="${o.id}">
             ${statuses.map(s => `<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
           </select>
         </div>
@@ -214,11 +229,11 @@
           <div class="order-field"><span class="k">العنوان</span><span class="v">${escapeHtml(o.address)}</span></div>
           <div class="order-field"><span class="k">عدد الزجاجات</span><span class="v">${o.qty}</span></div>
           <div class="order-field"><span class="k">وسيلة الدفع</span><span class="v">${escapeHtml(o.method)}</span></div>
-          <div class="order-field"><span class="k">الإجمالي</span><span class="v order-total">${o.total.toLocaleString('en-US')} جنيه</span></div>
+          <div class="order-field"><span class="k">الإجمالي</span><span class="v order-total">${Number(o.total).toLocaleString('en-US')} جنيه</span></div>
         </div>
         <div class="order-actions">
-          ${o.screenshot ? `<button class="ss-link" data-idx="${idx}" data-action="view">عرض صورة تأكيد الدفع</button>` : `<span style="font-size:.8rem;color:var(--parchment);opacity:.6;">لا توجد صورة تأكيد</span>`}
-          <button class="del-btn" data-idx="${idx}" data-action="delete">حذف الطلب</button>
+          ${o.screenshotUrl ? `<a class="ss-link" href="${o.screenshotUrl}" target="_blank" rel="noopener">عرض صورة تأكيد الدفع</a>` : `<span style="font-size:.8rem;color:var(--parchment);opacity:.6;">لا توجد صورة تأكيد</span>`}
+          <button class="del-btn" data-id="${o.id}" data-action="delete">حذف الطلب</button>
         </div>
       </div>
     `).join('');
@@ -230,29 +245,38 @@
     return div.innerHTML;
   }
 
-  document.getElementById('ordersList').addEventListener('click', (e) => {
+  document.getElementById('ordersList').addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if(!btn) return;
-    const idx = parseInt(btn.dataset.idx);
-    const orders = loadOrders();
-    if(btn.dataset.action === 'view'){
-      document.getElementById('modalImg').src = orders[idx].screenshot;
-      document.getElementById('modalOverlay').classList.add('open');
-    } else if(btn.dataset.action === 'delete'){
+    const id = btn.dataset.id;
+    if(btn.dataset.action === 'delete'){
       if(confirm('هل تريد حذف هذا الطلب؟')){
-        orders.splice(idx,1);
-        saveOrders(orders);
-        render();
+        btn.disabled = true;
+        try{
+          const res = await postAction({ action:'delete', id });
+          if(!res.success) throw new Error(res.error || 'unknown');
+          render();
+        }catch(err){
+          alert('تعذر حذف الطلب، حاول تاني.');
+          btn.disabled = false;
+        }
       }
     }
   });
 
-  document.getElementById('ordersList').addEventListener('change', (e) => {
+  document.getElementById('ordersList').addEventListener('change', async (e) => {
     if(e.target.classList.contains('status-select')){
-      const idx = parseInt(e.target.dataset.idx);
-      const orders = loadOrders();
-      orders[idx].status = e.target.value;
-      saveOrders(orders);
+      const id = e.target.dataset.id;
+      const newStatus = e.target.value;
+      e.target.disabled = true;
+      try{
+        const res = await postAction({ action:'updateStatus', id, status:newStatus });
+        if(!res.success) throw new Error(res.error || 'unknown');
+      }catch(err){
+        alert('تعذر تحديث الحالة، حاول تاني.');
+      }finally{
+        e.target.disabled = false;
+      }
     }
   });
 
@@ -264,10 +288,15 @@
   });
 
   document.getElementById('refreshBtn').addEventListener('click', render);
-  document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('clearBtn').addEventListener('click', async () => {
     if(confirm('هل أنت متأكد من حذف كل الحجوزات؟ لا يمكن التراجع عن هذا الإجراء.')){
-      saveOrders([]);
-      render();
+      try{
+        const res = await postAction({ action:'clear' });
+        if(!res.success) throw new Error(res.error || 'unknown');
+        render();
+      }catch(err){
+        alert('تعذر حذف كل الحجوزات، حاول تاني.');
+      }
     }
   });
 
