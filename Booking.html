@@ -207,6 +207,19 @@
   .transfer-number-row{
     display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
   }
+  .cod-warning{
+    margin-top:26px; padding:18px 20px; border-radius:8px; text-align:right;
+    background:rgba(201,162,74,.1); border:1px solid rgba(201,162,74,.5);
+    display:flex; align-items:flex-start; gap:12px;
+  }
+  .cod-warning svg{
+    flex-shrink:0; width:22px; height:22px; margin-top:2px; color:var(--gold-bright);
+  }
+  .cod-warning p{
+    color:var(--cream); font-size:.88rem; line-height:1.8; margin:0;
+  }
+  .cod-warning b{color:var(--gold-bright);}
+
   .instapay-link{
     display:inline-flex; align-items:center; gap:6px;
     font-size:.85rem; font-weight:700; color:var(--ink);
@@ -379,19 +392,40 @@
             <div class="pay-sub">تحويل عبر محفظة Orange Cash</div>
           </div>
         </label>
+        <label class="pay-option" data-method="فودافون كاش">
+          <input type="radio" name="payMethod" value="فودافون كاش">
+          <div class="pay-icon">🔴</div>
+          <div>
+            <div class="pay-name">فودافون كاش</div>
+            <div class="pay-sub">تحويل عبر محفظة Vodafone Cash</div>
+          </div>
+        </label>
+        <label class="pay-option" data-method="الدفع عند الاستلام">
+          <input type="radio" name="payMethod" value="الدفع عند الاستلام">
+          <div class="pay-icon">💵</div>
+          <div>
+            <div class="pay-name">الدفع كاش عند الاستلام</div>
+            <div class="pay-sub">تدفع قيمة الطلب نقدًا لما المندوب يوصلك</div>
+          </div>
+        </label>
       </div>
       <div class="error-text" id="err-method">من فضلك اختار وسيلة الدفع</div>
 
       <div class="transfer-box" id="transferBox" style="display:none;">
         <p>حوّل قيمة الطلب <b id="transferAmount" style="color:var(--gold-bright)"></b> على الرقم التالي عبر <span id="transferMethodName" style="color:var(--gold-bright)"></span>:</p>
         <div class="transfer-number-row">
-          <div class="transfer-number">01212448828</div>
+          <div class="transfer-number" id="transferNumber">01212448828</div>
           <a href="https://ipn.eg/S/mo7ammedelrifa3y/instapay/0J3aKs" target="_blank" rel="noopener" class="instapay-link" id="instapayLink" style="display:none;">
             <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             ادفع مباشرة عبر رابط انستا باي
           </a>
         </div>
         <button type="button" class="copy-btn" id="copyNumberBtn">نسخ الرقم</button>
+      </div>
+
+      <div class="cod-warning" id="codWarning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p>تنبيه: في حالة وجود مشكلة في استلام المنتج، <b>رجاء دفع سعر التوصيل فقط</b>.</p>
       </div>
 
       <div class="btn-row">
@@ -402,14 +436,20 @@
 
     <!-- STEP 3: upload screenshot -->
     <div class="panel" id="panel-3">
-      <label>ارفع صورة (سكرين شوت) تأكيد التحويل</label>
-      <div class="upload-zone" id="uploadZone">
-        <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 16V4m0 0L7 9m5-5l5 5M4 20h16"/></svg>
-        <p>اضغط هنا لرفع صورة تأكيد الدفع من تطبيق المحفظة</p>
+      <div id="uploadStep">
+        <label>ارفع صورة (سكرين شوت) تأكيد التحويل</label>
+        <div class="upload-zone" id="uploadZone">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 16V4m0 0L7 9m5-5l5 5M4 20h16"/></svg>
+          <p>اضغط هنا لرفع صورة تأكيد الدفع من تطبيق المحفظة</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display:none;">
+        <div class="upload-preview" id="uploadPreview"></div>
+        <div class="error-text" id="err-file">من فضلك ارفع صورة تأكيد الدفع</div>
       </div>
-      <input type="file" id="fileInput" accept="image/*" style="display:none;">
-      <div class="upload-preview" id="uploadPreview"></div>
-      <div class="error-text" id="err-file">من فضلك ارفع صورة تأكيد الدفع</div>
+      <div class="cod-warning" id="codWarningStep3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p>تنبيه: في حالة وجود مشكلة في استلام المنتج، <b>رجاء دفع سعر التوصيل فقط</b>.</p>
+      </div>
 
       <div class="summary-box">
         <div class="summary-row"><span>الاسم</span><span id="sumName"></span></div>
@@ -587,6 +627,12 @@
   function orderTotal(){
     return (state.qty * state.unitPrice) + deliveryFeeFor(state.governorate);
   }
+  const transferNumberEl = document.getElementById('transferNumber');
+  const transferNumbers = {
+    'انستا باي': '01212448828',
+    'أورنج كاش': '01212448828',
+    'فودافون كاش': '01009092378'
+  };
   payOptions.forEach(opt => {
     opt.addEventListener('click', () => {
       payOptions.forEach(o => o.classList.remove('selected'));
@@ -594,14 +640,21 @@
       opt.querySelector('input').checked = true;
       state.method = opt.dataset.method;
       document.getElementById('err-method').style.display = 'none';
-      document.getElementById('transferMethodName').textContent = state.method;
-      document.getElementById('transferAmount').textContent = orderTotal().toLocaleString('en-US') + ' جنيه';
-      document.getElementById('instapayLink').style.display = (state.method === 'انستا باي') ? 'inline-flex' : 'none';
-      transferBox.style.display = 'block';
+
+      if(state.method === 'الدفع عند الاستلام'){
+        transferBox.style.display = 'none';
+      } else {
+        const number = transferNumbers[state.method] || '01212448828';
+        document.getElementById('transferMethodName').textContent = state.method;
+        document.getElementById('transferAmount').textContent = orderTotal().toLocaleString('en-US') + ' جنيه';
+        transferNumberEl.textContent = number;
+        document.getElementById('instapayLink').style.display = (state.method === 'انستا باي') ? 'inline-flex' : 'none';
+        transferBox.style.display = 'block';
+      }
     });
   });
   document.getElementById('copyNumberBtn').addEventListener('click', () => {
-    navigator.clipboard.writeText('01212448828').then(() => {
+    navigator.clipboard.writeText(transferNumberEl.textContent).then(() => {
       const btn = document.getElementById('copyNumberBtn');
       const old = btn.textContent;
       btn.textContent = 'تم النسخ ✓';
@@ -622,6 +675,10 @@
     document.getElementById('sumMethod').textContent = state.method;
     document.getElementById('sumDelivery').textContent = deliveryFeeFor(state.governorate).toLocaleString('en-US') + ' جنيه';
     document.getElementById('sumTotal').textContent = orderTotal().toLocaleString('en-US') + ' جنيه';
+
+    const isCOD = state.method === 'الدفع عند الاستلام';
+    document.getElementById('uploadStep').style.display = isCOD ? 'none' : 'block';
+
     goToStep(3);
   });
 
@@ -644,7 +701,8 @@
   document.getElementById('backTo2').addEventListener('click', () => goToStep(2));
 
   document.getElementById('toStep4').addEventListener('click', () => {
-    if(!state.screenshot){
+    const isCOD = state.method === 'الدفع عند الاستلام';
+    if(!isCOD && !state.screenshot){
       document.getElementById('err-file').style.display = 'block';
       return;
     }
