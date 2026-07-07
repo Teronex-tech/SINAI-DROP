@@ -124,15 +124,27 @@
   }
   .qty-input:focus{outline:none;}
 
-  .size-row{display:flex; gap:12px;}
+  .size-row{display:flex; gap:12px; flex-wrap:wrap;}
   .size-option{
-    flex:1; text-align:center; padding:14px 10px; border-radius:8px; cursor:pointer;
-    border:1px solid rgba(201,162,74,.3); background:rgba(9,17,11,.4); transition:.2s;
+    flex:1 1 calc(50% - 12px); min-width:130px; text-align:center; padding:14px 10px; border-radius:8px; cursor:pointer;
+    border:1px solid rgba(201,162,74,.3); background:rgba(9,17,11,.4); transition:.2s; position:relative;
   }
   .size-option:hover{border-color:var(--gold);}
   .size-option.selected{border-color:var(--gold); background:rgba(201,162,74,.12);}
   .size-option .sz-name{font-weight:700; color:var(--gold-bright); font-size:.95rem;}
   .size-option .sz-price{font-size:.8rem; color:var(--parchment); margin-top:3px;}
+  .size-option .sz-oldprice{text-decoration:line-through; color:rgba(205,188,147,.5); margin-left:6px; font-size:.75rem;}
+  .size-option .sz-badge{
+    position:absolute; top:-9px; right:8px; background:var(--danger); color:var(--cream);
+    font-size:.62rem; font-weight:700; padding:2px 8px; border-radius:10px; letter-spacing:.02em;
+  }
+  .size-option .sz-gift{color:var(--gold-bright); font-weight:700; font-size:.72rem; margin-top:2px;}
+  .plan-note{
+    margin-top:14px; padding:12px 14px; border-radius:8px; font-size:.82rem; line-height:1.7;
+    color:var(--parchment); background:rgba(201,162,74,.08); border:1px solid rgba(201,162,74,.2); display:none;
+  }
+  .plan-note.show{display:block;}
+  .plan-note b{color:var(--gold-bright);}
 
   select{
     width:100%; background:rgba(9,17,11,.55); border:1px solid rgba(201,162,74,.3);
@@ -340,20 +352,34 @@
         <div class="error-text" id="err-address">من فضلك اكتب العنوان</div>
       </div>
       <div class="field">
-        <label>حجم الزجاجة</label>
+        <label>اختار الحجم أو العرض</label>
         <div class="size-row">
-          <div class="size-option selected" data-size="لتر" data-price="450">
+          <div class="size-option selected" data-size="لتر" data-price="400" data-oldprice="450" data-unitlabel="زجاجة" data-note="">
+            <div class="sz-badge">خصم</div>
             <div class="sz-name">لتر</div>
-            <div class="sz-price">450 جنيه</div>
+            <div class="sz-price"><span class="sz-oldprice">450 جنيه</span>400 جنيه</div>
           </div>
-          <div class="size-option" data-size="نصف لتر" data-price="275">
+          <div class="size-option" data-size="نصف لتر" data-price="225" data-oldprice="275" data-unitlabel="زجاجة" data-note="">
+            <div class="sz-badge">خصم</div>
             <div class="sz-name">نصف لتر</div>
-            <div class="sz-price">275 جنيه</div>
+            <div class="sz-price"><span class="sz-oldprice">275 جنيه</span>225 جنيه</div>
+          </div>
+          <div class="size-option" data-size="عرض: 2 زجاجة لتر" data-price="750" data-oldprice="900" data-unitlabel="عرض" data-note="كل عرض = 2 زجاجة لتر">
+            <div class="sz-badge">عرض</div>
+            <div class="sz-name">عرض 2 زجاجة لتر</div>
+            <div class="sz-price"><span class="sz-oldprice">900 جنيه</span>750 جنيه</div>
+          </div>
+          <div class="size-option" data-size="عرض: 3 زجاجة لتر + هدية نصف لتر مجانًا" data-price="1200" data-oldprice="" data-unitlabel="عرض" data-note="كل عرض = 3 زجاجة لتر + هدية زجاجة نصف لتر مجانًا">
+            <div class="sz-badge">هدية</div>
+            <div class="sz-name">3 لتر + نصف لتر هدية</div>
+            <div class="sz-price">1200 جنيه</div>
+            <div class="sz-gift">+ زجاجة نصف لتر هدية مجانًا</div>
           </div>
         </div>
+        <div class="plan-note" id="planNote"></div>
       </div>
       <div class="field">
-        <label>عدد الزجاجات</label>
+        <label id="qtyFieldLabel">عدد الزجاجات</label>
         <div class="qty-row">
           <button type="button" class="qty-btn" id="qtyMinus">−</button>
           <input type="text" class="qty-input" id="qtyInput" value="1" inputmode="numeric">
@@ -361,11 +387,11 @@
         </div>
       </div>
       <div class="price-box">
-        <div class="price-row"><span>سعر الزجاجة</span><span id="unitPriceLabel">450 جنيه</span></div>
-        <div class="price-row"><span>العدد</span><span id="qtyLabel">1</span></div>
-        <div class="price-row"><span>الإجمالي الفرعي</span><span id="subtotalLabel">450 جنيه</span></div>
+        <div class="price-row"><span id="unitPriceRowLabel">سعر الزجاجة</span><span id="unitPriceLabel">400 جنيه</span></div>
+        <div class="price-row"><span id="qtyRowLabel">العدد</span><span id="qtyLabel">1</span></div>
+        <div class="price-row"><span>الإجمالي الفرعي</span><span id="subtotalLabel">400 جنيه</span></div>
         <div class="price-row"><span>رسوم التوصيل</span><span id="deliveryLabel">-- جنيه</span></div>
-        <div class="price-row total"><span>الإجمالي</span><span id="totalLabel">450 جنيه</span></div>
+        <div class="price-row total"><span>الإجمالي</span><span id="totalLabel">400 جنيه</span></div>
       </div>
       <div class="btn-row">
         <button type="button" class="btn btn-gold" id="toStep2">التالي: طريقة الدفع</button>
@@ -455,7 +481,7 @@
         <div class="summary-row"><span>الاسم</span><span id="sumName"></span></div>
         <div class="summary-row"><span>الموبايل</span><span id="sumPhone" dir="ltr"></span></div>
         <div class="summary-row"><span>المحافظة</span><span id="sumGov"></span></div>
-        <div class="summary-row"><span>حجم الزجاجة</span><span id="sumSize"></span></div>
+        <div class="summary-row"><span>الحجم / العرض</span><span id="sumSize"></span></div>
         <div class="summary-row"><span>عدد الزجاجات</span><span id="sumQty"></span></div>
         <div class="summary-row"><span>وسيلة الدفع</span><span id="sumMethod"></span></div>
         <div class="summary-row"><span>رسوم التوصيل</span><span id="sumDelivery"></span></div>
@@ -508,7 +534,7 @@
 
   const state = {
     name:'', phone:'', phone2:'', email:'', governorate:'', address:'',
-    size:'لتر', unitPrice:450, qty:1, method:'', screenshot:null
+    size:'لتر', unitPrice:400, unitLabel:'زجاجة', planNote:'', qty:1, method:'', screenshot:null
   };
 
   // تعبئة قائمة المحافظات
@@ -539,15 +565,44 @@
 
   /* ---- Step 1: size + quantity + price ---- */
   const sizeOptions = document.querySelectorAll('.size-option');
+  const planNoteEl = document.getElementById('planNote');
+  const qtyFieldLabel = document.getElementById('qtyFieldLabel');
+  const unitPriceRowLabel = document.getElementById('unitPriceRowLabel');
+  const qtyRowLabel = document.getElementById('qtyRowLabel');
+
+  function applyPlanUI(opt){
+    state.size = opt.dataset.size;
+    state.unitPrice = parseInt(opt.dataset.price, 10);
+    state.unitLabel = opt.dataset.unitlabel || 'زجاجة';
+    state.planNote = opt.dataset.note || '';
+
+    if(state.unitLabel === 'عرض'){
+      qtyFieldLabel.textContent = 'عدد العروض';
+      unitPriceRowLabel.textContent = 'سعر العرض';
+      qtyRowLabel.textContent = 'عدد العروض';
+    } else {
+      qtyFieldLabel.textContent = 'عدد الزجاجات';
+      unitPriceRowLabel.textContent = 'سعر الزجاجة';
+      qtyRowLabel.textContent = 'العدد';
+    }
+
+    if(state.planNote){
+      planNoteEl.textContent = state.planNote;
+      planNoteEl.classList.add('show');
+    } else {
+      planNoteEl.classList.remove('show');
+    }
+  }
+
   sizeOptions.forEach(opt => {
     opt.addEventListener('click', () => {
       sizeOptions.forEach(o => o.classList.remove('selected'));
       opt.classList.add('selected');
-      state.size = opt.dataset.size;
-      state.unitPrice = parseInt(opt.dataset.price, 10);
+      applyPlanUI(opt);
       updatePrice();
     });
   });
+  applyPlanUI(document.querySelector('.size-option.selected'));
 
   const qtyInput = document.getElementById('qtyInput');
   const qtyLabel = document.getElementById('qtyLabel');
@@ -671,7 +726,7 @@
     document.getElementById('sumPhone').textContent = state.phone + (state.phone2 ? ' / ' + state.phone2 : '');
     document.getElementById('sumGov').textContent = state.governorate;
     document.getElementById('sumSize').textContent = state.size;
-    document.getElementById('sumQty').textContent = state.qty;
+    document.getElementById('sumQty').textContent = state.qty + (state.unitLabel === 'عرض' ? ' عرض' : ' زجاجة');
     document.getElementById('sumMethod').textContent = state.method;
     document.getElementById('sumDelivery').textContent = deliveryFeeFor(state.governorate).toLocaleString('en-US') + ' جنيه';
     document.getElementById('sumTotal').textContent = orderTotal().toLocaleString('en-US') + ' جنيه';
